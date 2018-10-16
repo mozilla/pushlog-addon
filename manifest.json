@@ -1,7 +1,7 @@
 {
     "name": "Pushlog",
     "description": "This webextension add an item in context menu to get the pushlog from a selected buildid",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "manifest_version": 2,
     "applications": {
         "gecko": {
