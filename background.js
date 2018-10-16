@@ -6,6 +6,7 @@
 
 let idUrl = {};
 let port = null;
+const anchorPat = new RegExp("#[^/]*$");
 
 function menuHandler(info, tab) {
   if (idUrl.hasOwnProperty(info.menuItemId)) {
@@ -32,6 +33,7 @@ function connected(p) {
 }
 
 function addMenu(currentUrl) {
+  currentUrl = currentUrl.replace(anchorPat, "");
   let title = "";
   if (Object.keys(idUrl).length == 1) {
     title = "Pushlog";
