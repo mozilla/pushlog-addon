@@ -1,0 +1,33 @@
+{
+    "name": "Pushlog",
+    "description": "This webextension add an item in context menu to get the pushlog from a selected buildid",
+    "version": "0.0.1",
+    "manifest_version": 2,
+    "applications": {
+        "gecko": {
+            "id": "pushlog@calixteman"
+        }
+    },
+    "icons": {
+        "16": "icons/mercurial-16.png",
+        "32": "icons/mercurial-32.png",
+        "64": "icons/mercurial-64.png"
+    },
+    "homepage_url": "https://github.com/mozilla/pushlog-addon",
+    "background": {
+        "scripts": ["background.js"]
+    },
+    "content_scripts": [
+        {
+            "matches": ["https://bugzilla.mozilla.org/*",
+                        "https://crash-stats.mozilla.com/*",
+                        "https://hg.mozilla.org/*"],
+            "js": ["content.js"],
+            "run_at": "document_end"
+        }
+    ],
+    "permissions": [
+        "https://buildhub.prod.mozaws.net/*",
+        "contextMenus"
+    ]
+}
