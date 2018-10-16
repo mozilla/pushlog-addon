@@ -58,6 +58,10 @@ function init() {
   port = browser.runtime.connect({name: "pushlog-port"});
 }
 
+function getMajor(version) {
+  return parseInt(version.split(".")[0], 10);
+}
+
 function checkBuildid(s) {
   if (s.match(buildidPattern)) {
     let n = parseInt(s, 10);
@@ -86,7 +90,12 @@ function extract(data, baseBuildid) {
         const lastRevision = buckets[0].revisions.buckets[0].key.slice(0, 12);
         const prevRevision = buckets[1].revisions.buckets[0].key.slice(0, 12);
         const id = product + "-" + channel;
-        results[id] = getPushlogUrl(lastRevision, prevRevision, channel);
+        if (channel === "esr") {
+          const major = getMajor(buckets[0].versions.buckets[0].key);
+          results[id] = getPushlogUrl(lastRevision, prevRevision, "esr" + major);
+        } else {
+          results[id] = getPushlogUrl(lastRevision, prevRevision, channel);
+        }
       }
     });
   });
@@ -98,6 +107,8 @@ function getBaseUrl(channel) {
     return "https://hg.mozilla.org/releases/mozilla-beta/pushloghtml?fromchange=";
   } else if (channel === "release") {
     return "https://hg.mozilla.org/releases/mozilla-release/pushloghtml?fromchange=";
+  } else if (channel.startsWith("esr")) {
+    return "https://hg.mozilla.org/releases/mozilla-" + channel + "/pushloghtml?fromchange=";
   }
   return "https://hg.mozilla.org/mozilla-central/pushloghtml?fromchange=";
 }
@@ -119,7 +130,7 @@ async function getBuildInfo(buildid) {
           "channels": {
             "terms": {
               "field": "target.channel",
-              "size": 4
+              "size": 5
             },
             "aggs": {
               "buildids": {
@@ -136,6 +147,12 @@ async function getBuildInfo(buildid) {
                       "field": "source.revision",
                       "size": 1
                     }
+                  },
+                  "versions": {
+                    "terms": {
+                      "field": "target.version",
+                      "size": 1
+                    }
                   }
                 }
               }
@@ -147,10 +164,10 @@ async function getBuildInfo(buildid) {
     "query": {
       "bool": {
         "filter": [
-          {"terms": {"target.channel": ["release", "beta", "aurora", "nightly"]}},
+          {"terms": {"target.channel": ["release", "beta", "aurora", "nightly", "esr"]}},
           {"terms": {"source.product": ["devedition", "firefox", "fennec"]}},
           {"range": {"build.id": {"lte": buildid}}},
-          {"regexp": {"target.version": "[0-9]+\.[0-9]+([ab\.][0-9]+)?"}}
+          {"regexp": {"target.version": "[0-9]+\.[0-9]+([ab\.][0-9]+)?(esr)?"}}
         ]
       }
     },
