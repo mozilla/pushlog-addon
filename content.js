@@ -94,7 +94,7 @@ function extract(data, baseBuildid) {
 }
 
 function getBaseUrl(channel) {
-  if (channel === "beta") {
+  if (channel === "beta" || channel === "aurora") {
     return "https://hg.mozilla.org/releases/mozilla-beta/pushloghtml?fromchange=";
   } else if (channel === "release") {
     return "https://hg.mozilla.org/releases/mozilla-release/pushloghtml?fromchange=";
@@ -113,13 +113,13 @@ async function getBuildInfo(buildid) {
       "products": {
         "terms": {
           "field": "source.product",
-          "size": 2
+          "size": 3
         },
         "aggs": {
           "channels": {
             "terms": {
               "field": "target.channel",
-              "size": 3
+              "size": 4
             },
             "aggs": {
               "buildids": {
@@ -147,8 +147,8 @@ async function getBuildInfo(buildid) {
     "query": {
       "bool": {
         "filter": [
-          {"terms": {"target.channel": ["release", "beta", "nightly"]}},
-          {"terms": {"source.product": ["firefox", "fennec"]}},
+          {"terms": {"target.channel": ["release", "beta", "aurora", "nightly"]}},
+          {"terms": {"source.product": ["devedition", "firefox", "fennec"]}},
           {"range": {"build.id": {"lte": buildid}}},
           {"regexp": {"target.version": "[0-9]+\.[0-9]+([ab\.][0-9]+)?"}}
         ]
