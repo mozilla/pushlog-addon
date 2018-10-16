@@ -28,6 +28,7 @@
     ],
     "permissions": [
         "https://buildhub.prod.mozaws.net/*",
-        "contextMenus"
+        "contextMenus",
+        "tabs"
     ]
 }

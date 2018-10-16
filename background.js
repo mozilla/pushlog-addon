@@ -31,25 +31,35 @@ function connected(p) {
   }
 }
 
+function addMenu(currentUrl) {
+  let title = "";
+  if (Object.keys(idUrl).length == 1) {
+    title = "Pushlog";
+  }
+  for (let id in idUrl) {
+    browser.contextMenus.create({
+      id: id,
+      title: title === "" ? id : title,
+      contexts: ["selection"],
+      icons: {
+        "16": "icons/mercurial-16.png",
+        "32": "icons/mercurial-32.png",
+        "64": "icons/mercurial-64.png",
+      },
+      documentUrlPatterns: [currentUrl]
+    });
+  }
+}
+
 function notify(msg) {
   if (msg.hasOwnProperty("pushlog-data")) {
     idUrl = msg["pushlog-data"];
-    let title = "";
-    if (Object.keys(idUrl).length == 1) {
-      title = "Pushlog";
-    }
-    for (let id in idUrl) {
-      browser.contextMenus.create({
-        id: id,
-        title: title === "" ? id : title,
-        contexts: ["selection"],
-        icons: {
-          "16": "icons/mercurial-16.png",
-          "32": "icons/mercurial-32.png",
-          "64": "icons/mercurial-64.png",
-        }
-      });
-    }
+    browser.tabs.query({active: true,
+                        windowId: browser.windows.WINDOW_ID_CURRENT})
+           .then(tabs => browser.tabs.get(tabs[0].id))
+           .then(tab => {
+             addMenu(tab.url);
+           });
   } else if (msg === "pushlog-clean") {
     clean();
   }
