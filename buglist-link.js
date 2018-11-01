@@ -1,6 +1,6 @@
 var bugs = [];
 
-function getCommonLandings() {
+function createBuglist() {
 	//look for Bug # on page
 	let result;
 	let re = /Bug ([0-9]+)/ig;
@@ -9,7 +9,7 @@ function getCommonLandings() {
 	}
 	//consolidate Bug #
 	bugs = new Set(bugs);
-	
+
 	if (bugs.size === 0) {
 		return;
 	}
@@ -24,9 +24,9 @@ function getCommonLandings() {
 	a.id = 'addon-buglist';
 	a.style = 'float:right';
 
-	//create link to buglist
+	//create generic buglist-link
 	titlebar.appendChild(a);
-	
+
 	//fill link to buglist with data
 	for (let bug of bugs) {
 		let a = document.getElementById('addon-buglist');
@@ -34,4 +34,4 @@ function getCommonLandings() {
 	}
 }
 
-getCommonLandings();
+createBuglist();
