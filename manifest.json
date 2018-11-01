@@ -24,6 +24,11 @@
                         "https://hg.mozilla.org/*"],
             "js": ["content.js"],
             "run_at": "document_end"
+        },
+        {
+            "matches": ["https://hg.mozilla.org/mozilla-central/pushloghtml*"],
+            "js": ["buglist-link.js"],
+			"run_at": "document_end"
         }
     ],
     "permissions": [
