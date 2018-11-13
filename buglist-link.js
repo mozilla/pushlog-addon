@@ -26,7 +26,7 @@ function createBuglist() {
 
 	//create buglist link
 	let a = document.createElement('a');
-	a.textContent = 'View as Buglist on Bugzilla';
+	a.textContent = 'View as buglist on Bugzilla';
 	a.href = url;
 	a.id = 'addon-buglist';
 	a.style = 'float:right';
