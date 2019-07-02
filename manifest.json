@@ -32,7 +32,7 @@
         }
     ],
     "permissions": [
-        "https://buildhub.prod.mozaws.net/*",
+        "https://buildhub.moz.tools/*",
         "contextMenus",
         "tabs"
     ]
