@@ -118,7 +118,7 @@ function getPushlogUrl(last, prev, channel) {
 }
 
 async function getBuildInfo(buildid) {
-  const url = "https://buildhub.prod.mozaws.net/v1/buckets/build-hub/collections/releases/search";
+  const url = "https://buildhub.moz.tools/api/search";
   const query = {
     "aggs": {
       "products": {
