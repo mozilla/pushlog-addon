@@ -20,7 +20,7 @@
     "content_scripts": [
         {
             "matches": ["https://bugzilla.mozilla.org/*",
-                        "https://crash-stats.mozilla.com/*",
+                        "https://crash-stats.mozilla.org/*",
                         "https://hg.mozilla.org/*"],
             "js": ["content.js"],
             "run_at": "document_end"
